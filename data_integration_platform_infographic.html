@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>データ統合基盤 - グラフィックレコーディング風インフォグラフィック</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        
+        /* カラーパレット */
+        :root {
+            --fashion-1: #593C47;
+            --fashion-2: #F2E63D;
+            --fashion-3: #F2C53D;
+            --fashion-4: #F25C05;
+            --fashion-5: #F24405;
+            --white: #ffffff;
+            --light-gray: #f8fafc;
+            --text-dark: #334155;
+            --text-medium: #475569;
+            --text-blue: #1e40af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Yomogi', cursive;
+            background: linear-gradient(135deg, var(--light-gray) 0%, var(--white) 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ヘッダー */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+            border-bottom: 3px dashed var(--fashion-4);
+        }
+
+        .title {
+            font-family: 'Kaisei Decol', serif;
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--fashion-4), var(--fashion-5));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .title::after {
+            content: "✨";
+            position: absolute;
+            right: -40px;
+            top: -5px;
+            font-size: 24px;
+        }
+
+        .date {
+            font-size: 14px;
+            color: var(--text-medium);
+            background: var(--fashion-2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 2px solid var(--fashion-1);
+            transform: rotate(-2deg);
+        }
+
+        /* メインコンテンツ */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .section-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--fashion-2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-card::before {
+            content: "";
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--fashion-2), var(--fashion-3), var(--fashion-4));
+            border-radius: 12px;
+            z-index: -1;
+        }
+
+        .section-title {
+            font-family: 'Zen Kurenaido', sans-serif;
+            font-size: 18px;
+            color: var(--text-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .highlight {
+            background: var(--fashion-2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            border-bottom: 3px solid var(--fashion-4);
+            font-weight: bold;
+        }
+
+        .arrow {
+            font-size: 20px;
+            color: var(--fashion-4);
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        /* フルワイドセクション */
+        .full-width-section {
+            width: 100%;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 3px dashed var(--fashion-3);
+            position: relative;
+        }
+
+        .full-width-section::before {
+            content: "🏗️";
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: var(--white);
+            padding: 0 10px;
+            font-size: 24px;
+        }
+
+        /* 効果リスト */
+        .effect-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .effect-list li {
+            margin: 15px 0;
+            padding: 12px;
+            background: linear-gradient(90deg, var(--fashion-2), transparent);
+            border-left: 4px solid var(--fashion-4);
+            border-radius: 0 8px 8px 0;
+            position: relative;
+        }
+
+        .effect-list li::before {
+            content: "✅";
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--white);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        /* Mermaid図表スタイル */
+        .mermaid-container {
+            text-align: center;
+            margin: 20px 0;
+            background: var(--light-gray);
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid var(--fashion-3);
+        }
+
+        /* フッター */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: var(--fashion-1);
+            color: var(--white);
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        /* 手書き風要素 */
+        .handwritten {
+            font-family: 'Yomogi', cursive;
+            transform: rotate(-1deg);
+            background: var(--fashion-2);
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 2px solid var(--fashion-1);
+            display: inline-block;
+            margin: 5px;
+        }
+
+        .sketch-box {
+            border: 3px solid var(--fashion-4);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            background: var(--white);
+            transform: rotate(0.5deg);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .title {
+                font-size: 24px;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- ヘッダー -->
+        <div class="header">
+            <h1 class="title">データ統合基盤</h1>
+            <div class="date">📅 2025年1月</div>
+        </div>
+
+        <!-- メインコンテンツ -->
+        <div class="main-content">
+            <!-- 課題セクション -->
+            <div class="section-card">
+                <h2 class="section-title">
+                    ⚠️ 現在の課題
+                </h2>
+                <div class="sketch-box">
+                    <p><span class="highlight">Excelファイルが分散</span>しており、データ分析をするにはそれらを<span class="highlight">かき集めたり</span>、マクロで統合したりする必要があり、<span class="highlight">再利用性やメンテナンス性に欠ける</span>。</p>
+                </div>
+                
+                <div class="arrow">⬇️</div>
+                
+                <div class="sketch-box">
+                    <p>また、複数のWebアプリで<span class="highlight">同じデータをそれぞれで持っている</span>ことがあり、同期するための機能が必要になり、<span class="highlight">複雑になっている</span>。</p>
+                </div>
+            </div>
+
+            <!-- 解決イメージセクション -->
+            <div class="section-card">
+                <h2 class="section-title">
+                    💡 解決イメージ
+                </h2>
+                <div class="sketch-box">
+                    <p><span class="highlight">データを溜めるための場所</span>を作り、<span class="handwritten">徐々に移行</span>していく。</p>
+                </div>
+                
+                <div class="arrow">📦</div>
+                
+                <div class="sketch-box">
+                    <ul style="list-style: none; padding: 0;">
+                        <li>✏️ データを溜める機能</li>
+                        <li>📊 単純な表形式で表示</li>
+                        <li>📥📤 入出力する機能</li>
+                        <li>🔌 インターフェースを用意</li>
+                    </ul>
+                </div>
+                
+                <div class="handwritten">
+                    このデータを利用して物を作りやすくする！
+                </div>
+            </div>
+        </div>
+
+        <!-- データ統合基盤の構造図 -->
+        <div class="full-width-section">
+            <h2 class="section-title">
+                🏗️ データ統合基盤の構造
+            </h2>
+            <div class="mermaid-container">
+                <div class="mermaid">
+                graph TD
+                    A["📊 分散したExcelファイル"] --> B["📦 データ統合基盤"]
+                    C["💻 Webアプリ1"] --> B
+                    D["💻 Webアプリ2"] --> B
+                    E["💻 Webアプリ3"] --> B
+                    
+                    B --> F["📈 統一されたデータソース"]
+                    F --> G["🔌 統一インターフェース"]
+                    
+                    G --> H["📱 新しいアプリ1"]
+                    G --> I["📱 新しいアプリ2"]
+                    G --> J["📊 データ分析ツール"]
+                    G --> K["📋 レポート機能"]
+                    
+                    style B fill:#F2E63D,stroke:#593C47,stroke-width:3px
+                    style F fill:#F2C53D,stroke:#F25C05,stroke-width:2px
+                    style G fill:#F25C05,stroke:#593C47,stroke-width:2px
+                </div>
+            </div>
+        </div>
+
+        <!-- 効果セクション -->
+        <div class="full-width-section">
+            <h2 class="section-title">
+                📈 期待される効果
+            </h2>
+            <ul class="effect-list">
+                <li>
+                    <strong>データの再利用性向上 🔄</strong><br>
+                    <span class="highlight">複数のアプリで同じデータソース</span>を利用できるようになります
+                </li>
+                <li>
+                    <strong>シンプル化とメンテナンス性向上 🛠️</strong><br>
+                    <span class="highlight">データの保存場所と処理機能を分ける</span>ことで、システムがシンプルになります
+                </li>
+                <li>
+                    <strong>開発効率の向上 ⚡</strong><br>
+                    <span class="highlight">統一されたインターフェース</span>で接続できるため、開発効率が大幅に向上します
+                </li>
+            </ul>
+        </div>
+
+        <!-- フッター -->
+        <div class="footer">
+            📝 データ統合基盤 インフォグラフィック | Personal Assistant | 2025年1月作成
+        </div>
+    </div>
+
+    <script>
+        // Mermaid初期化
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#F2E63D',
+                primaryTextColor: '#593C47',
+                primaryBorderColor: '#F25C05',
+                lineColor: '#F25C05',
+                secondaryColor: '#F2C53D',
+                tertiaryColor: '#F24405'
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI検証用クレカ枠 - グラフィックレコーディング風インフォグラフィック</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        
+        /* カラーパレット */
+        :root {
+            --fashion-1: #593C47;
+            --fashion-2: #F2E63D;
+            --fashion-3: #F2C53D;
+            --fashion-4: #F25C05;
+            --fashion-5: #F24405;
+            --white: #ffffff;
+            --light-gray: #f8fafc;
+            --text-dark: #334155;
+            --text-medium: #475569;
+            --text-blue: #1e40af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Yomogi', cursive;
+            background: linear-gradient(135deg, var(--light-gray) 0%, var(--white) 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ヘッダー */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+            border-bottom: 3px dashed var(--fashion-4);
+        }
+
+        .title {
+            font-family: 'Kaisei Decol', serif;
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--fashion-4), var(--fashion-5));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .title::after {
+            content: "💳";
+            position: absolute;
+            right: -50px;
+            top: -5px;
+            font-size: 24px;
+        }
+
+        .date {
+            font-size: 14px;
+            color: var(--text-medium);
+            background: var(--fashion-2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 2px solid var(--fashion-1);
+            transform: rotate(-2deg);
+        }
+
+        /* 背景セクション */
+        .background-section {
+            width: 100%;
+            background: linear-gradient(135deg, var(--fashion-2), var(--fashion-3));
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            border: 3px solid var(--fashion-1);
+            position: relative;
+        }
+
+        .background-section::before {
+            content: "🎯";
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: var(--white);
+            padding: 0 10px;
+            font-size: 24px;
+        }
+
+        .background-title {
+            font-family: 'Zen Kurenaido', sans-serif;
+            font-size: 20px;
+            color: var(--fashion-1);
+            margin-bottom: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* メインコンテンツ */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .section-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--fashion-2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-card::before {
+            content: "";
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--fashion-2), var(--fashion-3), var(--fashion-4));
+            border-radius: 12px;
+            z-index: -1;
+        }
+
+        .section-title {
+            font-family: 'Zen Kurenaido', sans-serif;
+            font-size: 18px;
+            color: var(--text-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .highlight {
+            background: var(--fashion-2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            border-bottom: 3px solid var(--fashion-4);
+            font-weight: bold;
+        }
+
+        .price-highlight {
+            background: var(--fashion-4);
+            color: var(--white);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* フルワイドセクション */
+        .full-width-section {
+            width: 100%;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 3px dashed var(--fashion-3);
+            position: relative;
+        }
+
+        .full-width-section::before {
+            content: "🔧";
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: var(--white);
+            padding: 0 10px;
+            font-size: 24px;
+        }
+
+        /* ユースケースカード */
+        .usecase-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .usecase-card {
+            background: linear-gradient(135deg, var(--fashion-3), var(--fashion-2));
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid var(--fashion-1);
+            transform: rotate(1deg);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .usecase-card:nth-child(2) {
+            transform: rotate(-1deg);
+        }
+
+        .usecase-card:nth-child(3) {
+            transform: rotate(0.5deg);
+        }
+
+        .usecase-card:hover {
+            transform: rotate(0deg) scale(1.05);
+        }
+
+        .usecase-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .usecase-title {
+            font-family: 'Zen Kurenaido', sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--fashion-1);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .usecase-description {
+            font-size: 14px;
+            text-align: center;
+            color: var(--text-dark);
+        }
+
+        /* Mermaid図表スタイル */
+        .mermaid-container {
+            text-align: center;
+            margin: 20px 0;
+            background: var(--light-gray);
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid var(--fashion-3);
+        }
+
+        /* 予算計算 */
+        .budget-calculation {
+            background: var(--fashion-2);
+            border: 3px solid var(--fashion-1);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+            transform: rotate(-1deg);
+        }
+
+        .budget-formula {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--fashion-1);
+            margin: 15px 0;
+        }
+
+        .budget-breakdown {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .budget-item {
+            background: var(--white);
+            border: 2px solid var(--fashion-4);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        /* 運用フロー */
+        .operation-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .flow-step {
+            background: var(--white);
+            border: 3px solid var(--fashion-4);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+            transform: rotate(1deg);
+            position: relative;
+        }
+
+        .flow-step:nth-child(2) {
+            transform: rotate(-1deg);
+        }
+
+        .flow-step:nth-child(3) {
+            transform: rotate(0.5deg);
+        }
+
+        .flow-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .flow-arrow {
+            font-size: 24px;
+            color: var(--fashion-4);
+            margin: 0 10px;
+        }
+
+        /* フッター */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: var(--fashion-1);
+            color: var(--white);
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        /* 手書き風要素 */
+        .handwritten {
+            font-family: 'Yomogi', cursive;
+            transform: rotate(-1deg);
+            background: var(--fashion-2);
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 2px solid var(--fashion-1);
+            display: inline-block;
+            margin: 5px;
+        }
+
+        .sketch-box {
+            border: 3px solid var(--fashion-4);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            background: var(--white);
+            transform: rotate(0.5deg);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .title {
+                font-size: 24px;
+            }
+
+            .budget-breakdown {
+                flex-direction: column;
+            }
+
+            .operation-flow {
+                flex-direction: column;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- ヘッダー -->
+        <div class="header">
+            <h1 class="title">AI検証用クレカ枠</h1>
+            <div class="date">📅 2025年1月</div>
+        </div>
+
+        <!-- 背景セクション -->
+        <div class="background-section">
+            <h2 class="background-title">🎯 背景・目的</h2>
+            <p><span class="highlight">開発者が二人しかいない</span>ため、効率を上げるために<span class="highlight">生成AIツールを活用</span>したい。現在様々なツールが存在し、これからも新しいものが増えていくと予想できる。ネットで情報を集めることはできるが、<span class="highlight">結局使ってみないとどれがいいか分からない</span>ので、その検証をするための自由枠が欲しい。</p>
+        </div>
+
+        <!-- メインコンテンツ -->
+        <div class="main-content">
+            <!-- 予算枠セクション -->
+            <div class="section-card">
+                <h2 class="section-title">
+                    💰 枠イメージ
+                </h2>
+                <div class="sketch-box">
+                    <p>現状の生成AIツールは<span class="highlight">1ツールにつき月1万程</span>あれば検証が可能そう</p>
+                </div>
+                
+                <div class="budget-calculation">
+                    <div class="budget-formula">
+                        <span class="price-highlight">月1万円</span> × <span class="price-highlight">3ツール</span> = <span class="price-highlight">月3万円</span>
+                    </div>
+                    <p>同時に比較できる数は3つくらい</p>
+                </div>
+
+                <div class="handwritten">
+                    検証には比較が重要！🔍
+                </div>
+            </div>
+
+            <!-- 運用方針セクション -->
+            <div class="section-card">
+                <h2 class="section-title">
+                    🛡️ 運用方針
+                </h2>
+                <div class="sketch-box">
+                    <p><span class="highlight">カードを私たちが持つと、紛失のリスク</span>が怖いので</p>
+                </div>
+                
+                <div class="sketch-box">
+                    <p><span class="highlight">新しく契約する際には本社で経理の方</span>にお願いする形にしたい</p>
+                </div>
+
+                <div class="handwritten">
+                    安全第一！🔒
+                </div>
+            </div>
+        </div>
+
+        <!-- ユースケース -->
+        <div class="full-width-section">
+            <h2 class="section-title">
+                🚀 想定ユースケース
+            </h2>
+            <div class="usecase-cards">
+                <div class="usecase-card">
+                    <div class="usecase-icon">🔄</div>
+                    <div class="usecase-title">ワークフロー自動化</div>
+                    <div class="usecase-description">Claude Codeによるワークフローの自動化</div>
+                </div>
+                <div class="usecase-card">
+                    <div class="usecase-icon">⚖️</div>
+                    <div class="usecase-title">AIツール比較</div>
+                    <div class="usecase-description">Devin, GitHub Copilot Coding Agentなど、似ているツールの比較</div>
+                </div>
+                <div class="usecase-card">
+                    <div class="usecase-icon">🧪</div>
+                    <div class="usecase-title">API直接利用</div>
+                    <div class="usecase-description">AIモデルプロバイダーのAPIを直に利用したアプリのPoC</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 運用フロー -->
+        <div class="full-width-section">
+            <h2 class="section-title">
+                📋 運用フロー
+            </h2>
+            <div class="operation-flow">
+                <div class="flow-step">
+                    <div class="flow-icon">🔍</div>
+                    <div><strong>1. 検証対象選定</strong></div>
+                    <div>開発チームが新ツールを発見・選定</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon">📞</div>
+                    <div><strong>2. 本社経理へ依頼</strong></div>
+                    <div>経理担当者がカードで契約手続き</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon">⚗️</div>
+                    <div><strong>3. 検証実施</strong></div>
+                    <div>開発チームが実際にツールを検証</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon">📊</div>
+                    <div><strong>4. 結果報告</strong></div>
+                    <div>検証結果をまとめて継続判断</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 検証対象ツール例 -->
+        <div class="full-width-section">
+            <h2 class="section-title">
+                🛠️ 検証対象ツール例
+            </h2>
+            <div class="mermaid-container">
+                <div class="mermaid">
+                graph TD
+                    A["🤖 AI開発支援ツール"] --> B["💻 コード生成"]
+                    A --> C["🔄 ワークフロー"]
+                    A --> D["🧠 API/モデル"]
+                    
+                    B --> E["GitHub Copilot<br/>Coding Agent"]
+                    B --> F["Devin"]
+                    B --> G["Cursor AI"]
+                    
+                    C --> H["Claude Code"]
+                    C --> I["AutoGen"]
+                    C --> J["LangChain"]
+                    
+                    D --> K["OpenAI API"]
+                    D --> L["Anthropic API"]
+                    D --> M["Google AI API"]
+                    
+                    style A fill:#F2E63D,stroke:#593C47,stroke-width:3px
+                    style B fill:#F2C53D,stroke:#F25C05,stroke-width:2px
+                    style C fill:#FFE066,stroke:#F25C05,stroke-width:2px
+                    style D fill:#FFB347,stroke:#F25C05,stroke-width:2px
+                </div>
+            </div>
+        </div>
+
+        <!-- 期待効果 -->
+        <div class="full-width-section">
+            <h2 class="section-title">
+                📈 期待される効果
+            </h2>
+            <div class="budget-breakdown">
+                <div class="budget-item">
+                    <div style="font-size: 24px;">⚡</div>
+                    <strong>開発効率向上</strong>
+                    <div>最適なAIツール選定</div>
+                </div>
+                <div class="budget-item">
+                    <div style="font-size: 24px;">💰</div>
+                    <strong>コスト最適化</strong>
+                    <div>無駄な契約を回避</div>
+                </div>
+                <div class="budget-item">
+                    <div style="font-size: 24px;">🎯</div>
+                    <strong>技術力向上</strong>
+                    <div>最新技術のキャッチアップ</div>
+                </div>
+                <div class="budget-item">
+                    <div style="font-size: 24px;">🔍</div>
+                    <strong>情報収集</strong>
+                    <div>実践的な知見蓄積</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ツール料金例 -->
+        <div class="full-width-section">
+            <h2 class="section-title">
+                💰 ツール料金例
+            </h2>
+            <div class="usecase-cards">
+                <div class="usecase-card">
+                    <div class="usecase-icon">🔥</div>
+                    <div class="usecase-title">Claude Code Max</div>
+                    <div class="price-highlight" style="margin: 10px 0;">$100/月</div>
+                    <div class="usecase-description">フル機能でのワークフロー自動化</div>
+                </div>
+                <div class="usecase-card">
+                    <div class="usecase-icon">🤖</div>
+                    <div class="usecase-title">Devin</div>
+                    <div class="price-highlight" style="margin: 10px 0;">$20 + 従量課金</div>
+                    <div class="usecase-description">基本料金＋使用量に応じた追加料金</div>
+                </div>
+                <div class="usecase-card">
+                    <div class="usecase-icon">🚀</div>
+                    <div class="usecase-title">GitHub Copilot</div>
+                    <div class="price-highlight" style="margin: 10px 0;">$10～$39/月</div>
+                    <div class="usecase-description">個人プランからビジネスプランまで<br><span style="color: var(--fashion-4); font-weight: bold;">※Coding Agent等は枠超過で従量課金</span></div>
+                </div>
+                <div class="usecase-card">
+                    <div class="usecase-icon">🧠</div>
+                    <div class="usecase-title">OpenAI API</div>
+                    <div class="price-highlight" style="margin: 10px 0;">従量課金</div>
+                    <div class="usecase-description">使用トークン数に応じた料金体系</div>
+                </div>
+            </div>
+            
+            <div class="sketch-box" style="text-align: center; margin-top: 30px;">
+                <h3 style="color: var(--fashion-1); margin-bottom: 15px;">💡 料金体系の特徴</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; text-align: left;">
+                    <div>
+                        <strong>📊 定額制</strong><br>
+                        Claude Code Max、GitHub Copilotなど<br>
+                        <span style="color: var(--fashion-4);">→ 予算管理しやすい</span>
+                    </div>
+                    <div>
+                        <strong>⚡ 従量課金</strong><br>
+                        Devin、OpenAI APIなど<br>
+                        <span style="color: var(--fashion-4);">→ 使用量に応じてコスト変動</span>
+                    </div>
+                    <div>
+                        <strong>🔄 ハイブリッド</strong><br>
+                        基本料金＋従量課金<br>
+                        <span style="color: var(--fashion-4);">→ Devin、GitHub Copilot Coding Agent等</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- フッター -->
+        <div class="footer">
+            📝 AI検証用クレカ枠 インフォグラフィック | Personal Assistant | 2025年1月作成
+        </div>
+    </div>
+
+    <script>
+        // Mermaid初期化
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#F2E63D',
+                primaryTextColor: '#000000',
+                primaryBorderColor: '#F25C05',
+                lineColor: '#F25C05',
+                secondaryColor: '#F2C53D',
+                tertiaryColor: '#F24405',
+                // パイチャート用の設定
+                pie1: '#F2E63D',
+                pie2: '#F2C53D',
+                pie3: '#F25C05',
+                pie4: '#FFB347',
+                pieTitleTextSize: '16px',
+                pieTitleTextColor: '#593C47',
+                pieSectionTextSize: '14px',
+                pieSectionTextColor: '#000000',
+                // その他の設定
+                background: '#ffffff',
+                mainBkg: '#F2E63D',
+                secondBkg: '#F2C53D',
+                tertiaryBkg: '#ffffff'
+            }
+        });
+    </script>
+</body>
+</html> 

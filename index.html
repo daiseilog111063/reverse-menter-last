@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>開発効率化提案・要望 - インフォグラフィック集</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kaisei+Decol&family=Yomogi&family=Zen+Kurenaido&display=swap');
+        
+        /* カラーパレット */
+        :root {
+            --fashion-1: #593C47;
+            --fashion-2: #F2E63D;
+            --fashion-3: #F2C53D;
+            --fashion-4: #F25C05;
+            --fashion-5: #F24405;
+            --white: #ffffff;
+            --light-gray: #f8fafc;
+            --text-dark: #334155;
+            --text-medium: #475569;
+            --text-blue: #1e40af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Yomogi', cursive;
+            background: linear-gradient(135deg, var(--light-gray) 0%, var(--white) 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ヘッダー */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 30px 0;
+            border-bottom: 3px dashed var(--fashion-4);
+        }
+
+        .main-title {
+            font-family: 'Kaisei Decol', serif;
+            font-size: 36px;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--fashion-4), var(--fashion-5));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .main-title::after {
+            content: "📊";
+            position: absolute;
+            right: -50px;
+            top: -5px;
+            font-size: 30px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--text-medium);
+            background: var(--fashion-2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 2px solid var(--fashion-1);
+            display: inline-block;
+            transform: rotate(-1deg);
+        }
+
+        /* セクション */
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-family: 'Zen Kurenaido', sans-serif;
+            font-size: 28px;
+            color: var(--fashion-1);
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title.proposal::before {
+            content: "💡";
+            position: absolute;
+            left: -40px;
+            top: 0;
+            font-size: 24px;
+        }
+
+        .section-title.request::before {
+            content: "🙏";
+            position: absolute;
+            left: -40px;
+            top: 0;
+            font-size: 24px;
+        }
+
+        .section-description {
+            font-size: 16px;
+            color: var(--text-medium);
+            background: var(--fashion-3);
+            padding: 10px 20px;
+            border-radius: 15px;
+            border: 2px solid var(--fashion-1);
+            display: inline-block;
+            transform: rotate(1deg);
+        }
+
+        /* インフォグラフィックカード */
+        .infographic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .infographic-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border: 3px solid var(--fashion-2);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .infographic-card:hover {
+            transform: translateY(-5px) rotate(1deg);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .infographic-card::before {
+            content: "";
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(45deg, var(--fashion-2), var(--fashion-3), var(--fashion-4));
+            border-radius: 15px;
+            z-index: -1;
+        }
+
+        .card-icon {
+            font-size: 60px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-family: 'Zen Kurenaido', sans-serif;
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--fashion-1);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .card-summary {
+            font-size: 14px;
+            color: var(--text-dark);
+            text-align: center;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            background: var(--fashion-4);
+            color: var(--white);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .view-button {
+            background: var(--fashion-4);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            transition: background 0.3s ease;
+            border: 2px solid var(--fashion-1);
+        }
+
+        .view-button:hover {
+            background: var(--fashion-5);
+            color: var(--white);
+        }
+
+        /* 提案セクション用の追加スタイル */
+        .proposals-section {
+            background: linear-gradient(135deg, var(--fashion-2), var(--fashion-3));
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            border: 3px solid var(--fashion-1);
+            position: relative;
+        }
+
+        .proposals-section::before {
+            content: "💡";
+            position: absolute;
+            top: -20px;
+            left: 30px;
+            background: var(--white);
+            padding: 0 15px;
+            font-size: 30px;
+            border-radius: 50%;
+        }
+
+        /* 要望セクション用の追加スタイル */
+        .requests-section {
+            background: linear-gradient(135deg, var(--fashion-3), var(--fashion-2));
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            border: 3px solid var(--fashion-1);
+            position: relative;
+        }
+
+        .requests-section::before {
+            content: "🙏";
+            position: absolute;
+            top: -20px;
+            left: 30px;
+            background: var(--white);
+            padding: 0 15px;
+            font-size: 30px;
+            border-radius: 50%;
+        }
+
+        /* フッター */
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px;
+            background: var(--fashion-1);
+            color: var(--white);
+            border-radius: 15px;
+            font-size: 14px;
+        }
+
+        .footer-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 28px;
+            }
+            
+            .main-title::after {
+                right: -35px;
+                font-size: 24px;
+            }
+            
+            .infographic-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .proposals-section,
+            .requests-section {
+                padding: 25px;
+            }
+        }
+
+        /* アニメーション */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .infographic-card {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .infographic-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .infographic-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .infographic-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ヘッダー -->
+        <div class="header">
+            <h1 class="main-title">開発効率化提案・要望</h1>
+            <div class="subtitle">グラフィックレコーディング風インフォグラフィック集</div>
+        </div>
+
+        <!-- 提案セクション -->
+        <div class="proposals-section">
+            <div class="section-header">
+                <h2 class="section-title proposal">開発効率化提案</h2>
+                <div class="section-description">システム改善による生産性向上の提案</div>
+            </div>
+
+            <div class="infographic-grid">
+                <!-- 提案1: データ統合基盤 -->
+                <a href="data_integration_platform_infographic.html" class="infographic-card">
+                    <div class="card-icon">📦</div>
+                    <h3 class="card-title">提案1: データ統合基盤</h3>
+                    <p class="card-summary">
+                        分散したExcelファイルとWebアプリデータを統合し、
+                        再利用性とメンテナンス性を向上させる基盤の構築
+                    </p>
+                    <div class="card-tags">
+                        <span class="tag">データ統合</span>
+                        <span class="tag">基盤構築</span>
+                        <span class="tag">メンテナンス性</span>
+                    </div>
+                    <div class="view-button">詳細を見る 🔍</div>
+                </a>
+
+                <!-- 提案2: Webアプリ自動生成 -->
+                <a href="webapp_auto_generation_infographic.html" class="infographic-card">
+                    <div class="card-icon">🤖</div>
+                    <h3 class="card-title">提案2: Webアプリ自動生成</h3>
+                    <p class="card-summary">
+                        チャットとドラッグ&ドロップで開発を民主化し、
+                        各部署での内製化を実現する自動生成システム
+                    </p>
+                    <div class="card-tags">
+                        <span class="tag">自動生成</span>
+                        <span class="tag">民主化</span>
+                        <span class="tag">ノーコード</span>
+                    </div>
+                    <div class="view-button">詳細を見る 🔍</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- 要望セクション -->
+        <div class="requests-section">
+            <div class="section-header">
+                <h2 class="section-title request">開発支援要望</h2>
+                <div class="section-description">開発効率向上のための支援要望</div>
+            </div>
+
+            <div class="infographic-grid">
+                <!-- 要望1: AI検証用クレカ枠 -->
+                <a href="ai_verification_creditcard_infographic.html" class="infographic-card">
+                    <div class="card-icon">💳</div>
+                    <h3 class="card-title">要望1: AI検証用クレカ枠</h3>
+                    <p class="card-summary">
+                        開発者2名の効率向上のため、
+                        生成AIツールの検証用として月3万円の予算枠確保
+                    </p>
+                    <div class="card-tags">
+                        <span class="tag">AI検証</span>
+                        <span class="tag">予算枠</span>
+                        <span class="tag">効率化</span>
+                    </div>
+                    <div class="view-button">詳細を見る 🔍</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- 概要説明 -->
+        <div style="background: var(--white); border-radius: 15px; padding: 30px; margin: 40px 0; border: 3px dashed var(--fashion-3);">
+            <h3 style="color: var(--fashion-1); text-align: center; margin-bottom: 20px; font-family: 'Zen Kurenaido', sans-serif;">📋 このドキュメントについて</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; text-align: center;">
+                <div>
+                    <div style="font-size: 40px; margin-bottom: 10px;">🎯</div>
+                    <strong>目的</strong><br>
+                    開発効率化のための<br>提案・要望の可視化
+                </div>
+                <div>
+                    <div style="font-size: 40px; margin-bottom: 10px;">🎨</div>
+                    <strong>形式</strong><br>
+                    グラフィックレコーディング風<br>インフォグラフィック
+                </div>
+                <div>
+                    <div style="font-size: 40px; margin-bottom: 10px;">📊</div>
+                    <strong>内容</strong><br>
+                    課題・解決策・効果を<br>視覚的に整理
+                </div>
+            </div>
+        </div>
+
+        <!-- フッター -->
+        <div class="footer">
+            <div class="footer-icon">📝</div>
+            <div>開発効率化提案・要望 インフォグラフィック集</div>
+            <div>Personal Assistant | 2025年1月作成</div>
+        </div>
+    </div>
+</body>
+</html> 
